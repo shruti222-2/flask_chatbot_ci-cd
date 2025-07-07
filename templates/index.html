@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="chat-container">
+    <div id="chat-box"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type a message..." />
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("send-btn").addEventListener("click", () => {
+      const userInput = document.getElementById("user-input").value.trim();
+      if (userInput === "") return;
+
+      addMessage("You", userInput);
+      document.getElementById("user-input").value = "";
+
+      fetch("/get_response", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userInput })
+      })
+      .then(res => res.json())
+      .then(data => {
+        addMessage("Bot", data.response);
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        addMessage("Bot", "⚠️ Error reaching server.");
+      });
+    });
+
+    function addMessage(sender, text) {
+      const chatBox = document.getElementById("chat-box");
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${sender === "You" ? "user" : "bot"}`;
+      messageDiv.textContent = `${sender}: ${text}`;
+      chatBox.appendChild(messageDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+</body>
+</html>
