@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/shruti222-2/flask_chatbot_ci-cd.git'
-            }
-        }
-
         stage('Setup Python Environment') {
             steps {
                 sh '''
