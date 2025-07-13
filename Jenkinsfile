@@ -8,23 +8,23 @@ pipeline {
     stages {
         stage('Setup Python Environment') {
             steps {
-                sh '''
-                    python3 -m venv $VENV_DIR
-                    source $VENV_DIR/bin/activate
+                bat """
+                    python -m venv %VENV_DIR%
+                    call %VENV_DIR%\\Scripts\\activate.bat
                     pip install --upgrade pip
                     pip install -r requirements.txt
-                '''
+                """
             }
         }
 
         stage('Run Flask App') {
             steps {
-                sh '''
-                    source $VENV_DIR/bin/activate
-                    export FLASK_APP=main.py
-                    export FLASK_ENV=development
-                    flask run --host=0.0.0.0 --port=5000
-                '''
+                bat """
+                    call %VENV_DIR%\\Scripts\\activate.bat
+                    set FLASK_APP=main.py
+                    set FLASK_ENV=development
+                    flask run --host=127.0.0.1 --port=5000
+                """
             }
         }
     }
