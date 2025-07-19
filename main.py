@@ -33,8 +33,6 @@ def get_response():
     response = get_best_response(user_query)
     return jsonify({"response": response})
 
+
 if __name__ == "__main__":
-    app.run(debug=True)
-
-
-
+    app.run(host="0.0.0.0", port=5000, debug=True)
